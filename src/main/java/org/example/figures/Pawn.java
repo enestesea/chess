@@ -16,29 +16,34 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (!isValidPosition(toLine, toColumn)) {
+    public boolean canMoveToPosition(ChessBoard board, int line, int column, int toLine, int toColumn) {
+        if (isOutOfBounce(toLine, toColumn)) {
             return false;
         }
-
-        if (line == toLine && column == toColumn) {
-            return false;
+        if (column != toColumn) {
+            // Пешка бьет по диагонали
+            return board.board[toLine][toColumn] != null &&
+                    !board.board[toLine][toColumn].getColor().equals(this.color) &&
+                    Math.abs(column - toColumn) == 1 &&
+                    ((this.color.equals("White") && toLine - line == 1) ||
+                            (this.color.equals("Black") && line - toLine == 1));
         }
 
-        int direction = color.equals("White") ? 1 : -1; // Направление движения
-        int startLine = color.equals("White") ? 1 : 6;  // Начальная позиция для первого хода
-
-        if (column == toColumn) { // Пешка может двигаться только вперед
-            if (line + direction == toLine) {
-                return true; // Обычный ход вперед на 1 клетку
+        // Пешка ходит вперед
+        if (board.board[toLine][toColumn] == null) {
+            if (this.color.equals("White")) {
+                if (line == 1 && toLine - line == 2 && column == toColumn) {
+                    return board.isPathClear(line, column, toLine, toColumn);
+                }
+                return toLine - line == 1 && column == toColumn;
+            } else {
+                if (line == 6 && line - toLine == 2 && column == toColumn) {
+                    return board.isPathClear(line, column, toLine, toColumn);
+                }
+                return line - toLine == 1 && column == toColumn;
             }
-            else
-                return line == startLine && line + 2 * direction == toLine; // Первый ход вперед на 2 клетки
         }
         return false;
     }
 
-    private boolean isValidPosition(int line, int column) {
-        return line >= 0 && line < 8 && column >= 0 && column < 8;
-    }
 }

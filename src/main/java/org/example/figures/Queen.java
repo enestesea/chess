@@ -16,20 +16,15 @@ public class Queen extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (!isValidPosition(toLine, toColumn)) {
+    public boolean canMoveToPosition(ChessBoard board, int line, int column, int toLine, int toColumn) {
+        if (isOutOfBounce(toLine, toColumn)) {
             return false;
         }
 
-        if (line == toLine && column == toColumn) {
-            return false;
+        if (line == toLine || column == toColumn || Math.abs(line - toLine) == Math.abs(column - toColumn)) {
+            return board.isPathClear(line, column, toLine, toColumn);
         }
-
-        // Ферзь ходит как по диагонали, так и по прямой
-        return (Math.abs(line - toLine) == Math.abs(column - toColumn)) || (line == toLine || column == toColumn);
+        return false;
     }
 
-    private boolean isValidPosition(int line, int column) {
-        return line >= 0 && line < 8 && column >= 0 && column < 8;
-    }
 }

@@ -91,9 +91,27 @@ public class Main {
                         if (board.moveToPosition(line, column, toLine, toColumn)) {
                             System.out.println("Успешно передвинулись");
                             board.printBoard();
-                        } else System.out.println("Передвижение не удалось");
-                    } catch (Exception e) {
-                        System.out.println("Вы что-то ввели не так, попробуйте ещё раз");
+
+                            // Проверка на шах
+                            if (board.isKingInCheck("White")) {
+                                System.out.println("Белому королю шах!");
+                                if (board.isCheckmate("White")) {
+                                    System.out.println("Мат белому королю! Игра окончена.");
+                                    break;
+                                }
+                            }
+                            if (board.isKingInCheck("Black")) {
+                                System.out.println("Черному королю шах!");
+                                if (board.isCheckmate("Black")) {
+                                    System.out.println("Мат черному королю! Игра окончена.");
+                                    break;
+                                }
+                            }
+                        } else {
+                            System.out.println("Передвижение не удалось");
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException(e);
                     }
 
                 }

@@ -16,20 +16,13 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn) {
-        if (!isValidPosition(toLine, toColumn)) {
+    public boolean canMoveToPosition(ChessBoard board, int line, int column, int toLine, int toColumn) {
+        if (isOutOfBounce(toLine, toColumn)) {
             return false;
         }
 
-        if (line == toLine && column == toColumn) {
-            return false;
-        }
-
-        // Ладья ходит только по прямой (либо по горизонтали, либо по вертикали)
-        return line == toLine || column == toColumn;
+        if (line != toLine && column != toColumn) return false;
+        return board.isPathClear(line, column, toLine, toColumn);
     }
 
-    private boolean isValidPosition(int line, int column) {
-        return line >= 0 && line < 8 && column >= 0 && column < 8;
-    }
 }

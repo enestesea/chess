@@ -19,4 +19,12 @@ public abstract class ChessPiece {
     public abstract boolean canMoveToPosition(ChessBoard chessBoard, int line, int column, int toLine, int toColumn);
 
     public abstract String getSymbol();
+
+    public boolean isOutOfBounce(int col, int row) {
+        if (row < 0 || row > 7 || col < 0 || col > 7) {
+            return true;
+        }
+
+        return false;
+    }
 }
